@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="cn.st.sso.server.mapper.SysDepartmentMapper">
+	<resultMap type="sysDepartment" id="sysDepartmentMapper">
+		<id column="id" property="id"/>
+		<result column="dept_code" property="deptCode"/>
+		<result column="dept_name" property="deptName"/>
+		<result column="dept_spell" property="deptSpell"/>
+		<result column="dept_level" property="deptLevel"/>
+		<result column="other_name" property="otherName"/>
+		<result column="simple_name" property="simpleName"/>
+		<result column="is_formal" property="isFormal"/>
+		<result column="enable_date" property="enableDate"/>
+		<result column="is_enable" property="isEnable"/>
+		<result column="disable_date" property="disableDate"/>
+		<result column="is_stopped" property="isStopped"/>
+		<result column="original_code" property="originalCode"/>
+		<result column="original_stopped_date" property="originalStoppedDate"/>
+	</resultMap>
+	
+	
+	<insert id="add" parameterType="sysDepartment">
+		<selectKey order="BEFORE" keyProperty="id" resultType="long">
+			select s_sys_department.nextval from dual
+		</selectKey>
+		insert into sys_department(id,dept_code,dept_name,dept_spell,dept_level,other_name,simple_name,is_formal,enable_date,is_enable,disable_date,is_stopped,original_code,original_stopped_date) values(#{id},#{deptCode},#{deptName},#{deptSpell},#{deptLevel},#{otherName},#{simpleName},#{isFormal},#{enableDate},#{isEnable},#{disableDate},#{isStopped},#{originalCode},#{originalStoppedDate})
+	</insert>
+	
+	<delete id="delete" parameterType="long">
+		<![CDATA[	
+			delete from sys_department where id=#{id}
+		]]>
+	</delete>
+	
+	<update id="update" parameterType="sysDepartment">
+		<![CDATA[
+			update sys_department set dept_code=#{deptCode},dept_name=#{deptName},dept_spell=#{deptSpell},dept_level=#{deptLevel},other_name=#{otherName},simple_name=#{simpleName},is_formal=#{isFormal},enable_date=#{enableDate},is_enable=#{isEnable},disable_date=#{disableDate},is_stopped=#{isStopped},original_code=#{originalCode},original_stopped_date=#{originalStoppedDate} where id=#{id}
+		]]>
+	</update>
+	
+	<select id="load" parameterType="long" resultMap="sysDepartmentMapper">
+		<![CDATA[
+			select * from sys_department where id=#{id}
+		]]>
+	</select>
+	
+	<select id="findPage" resultMap="sysDepartmentMapper" parameterType="sysDepartment">
+  		<![CDATA[
+		select * from ( select row_.*, rownum rownum_ from ( 
+			select * from sys_department t
+		]]>
+		<if test="orderStr!=null">
+			<![CDATA[
+					order by ${orderStr}
+				]]>
+		</if>
+		<![CDATA[
+		
+			) row_ where rownum <= (#{pager.pageSize}+#{pager.offset})) where rownum_ > #{pager.offset}
+		]]>
+  </select>
+  
+  <select id="getCount" resultType="int" parameterType="sysDepartment">
+  		<![CDATA[
+			select count(1) from sys_department t
+		]]>
+  </select>
+</mapper>

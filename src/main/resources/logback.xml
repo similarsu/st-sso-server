@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${logger.pattern}</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="fileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${logger.dir}sso_server_%d{yyyy-MM-dd}.log</fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+
+        <encoder>
+            <pattern>${logger.pattern}</pattern>
+        </encoder>
+
+    </appender>
+    
+    <root level="${logger.root.level}">
+        <appender-ref ref="${logger.root.appender}" />
+    </root>
+    
+    <logger name="cn.st.sso.server" level="${logger.ssoserver.level}" additivity="false">
+     	<appender-ref ref="${logger.ssoserver.appender}" />
+    </logger>
+
+    <logger name="cn.st.sso.server.mapper" level="${logger.sql.level}" additivity="false">
+     	<appender-ref ref="${logger.sql.appender}" />
+    </logger>
+
+    
+</configuration>
